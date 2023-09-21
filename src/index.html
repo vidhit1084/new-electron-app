@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get Client</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <h1 id="title">Hello, World</h1>
+    <form id="clientForm">
+      <label for="client">Client:</label>
+      <input type="text" name="" id="client" />
+      <br />
+      <label for="store">Store:</label>
+      <input type="text" name="" id="store" />
+      <br />
+      <label for="software">Software:</label>
+      <input type="text" name="" id="software" />
+      <br />
+      <label for="app">App:</label>
+      <input type="text" name="" id="app" />
+      <br />
+      <button type="button" id="submitData">Submit Data</button>
+    </form>
+    <p class="success" id="successMessage" style="display: none">
+      Data submitted successfully.
+    </p>
+
+    <p class="sending" id="sendingMessage" style="display: none">
+      Sending Data...
+    </p>
+    <h1 id="failedMessage" style="display: none">
+      Failed to send data, because app is not running
+    </h1>
+    <!-- <button type="button" id="checkProcess">Check Data</button> -->
+
+    <script src="script.js"></script>
+  </body>
+</html>

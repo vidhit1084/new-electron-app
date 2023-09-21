@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ping Data</title>
+  </head>
+  <body>
+    <h1 id="successMessage">Sending Data</h1>
+    <h1 id="failedMessage" style="display: none">
+      Failed to send data, because app is not running
+    </h1>
+    <!-- <button type="button" id="editButton" style="display: none">
+      Edit Data
+    </button> -->
+
+    <button type="button" id="editButton" style="display: none">
+      Edit Data
+    </button>
+    <button type="button" id="cancelButton" style="display: none">
+      Cancel
+    </button>
+
+    <form id="editData" style="display: none">
+      <label for="client">Client:</label>
+      <input type="text" name="" id="editClient" />
+      <br />
+      <label for="store">Store:</label>
+      <input type="text" name="" id="editStore" />
+      <br />
+      <label for="software">Software:</label>
+      <input type="text" name="" id="editSoftware" />
+      <br />
+      <label for="app">App:</label>
+      <input type="text" name="" id="editApp" />
+      <br />
+      <button type="button" id="submitData">Submit Edited Data</button>
+    </form>
+    <h1 id="editSuccess" style="display: none">Data Edited Succesfully</h1>
+    <script type="module" src="dataScript.js"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "new-electron-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^26.2.2"
+  },
+  "build": {
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "dependencies": {
+    "electron-fetch": "^1.9.1",
+    "node-fetch": "^3.3.2"
+  }
+}
