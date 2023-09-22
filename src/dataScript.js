@@ -86,6 +86,7 @@ cancelButton.addEventListener("click", () => {
   editForm.style.display = "none";
   // editButton.style.display = "block";
   cancelButton.style.display = "none";
+  window.location.href = "success.html";
 });
 
 client_el.addEventListener("input", () => {
