@@ -120,7 +120,7 @@ ipcMain.handle("check-app-running", async (event, appName) => {
       console.log("Checking on Windows...");
 
       exec(`tasklist /FI "IMAGENAME eq ${appName}"`, (error, stdout) => {
-        if (!error && stdout) {
+        if (!error && stdout.toLowerCase().includes(appName.toLowerCase())) {
           resolve({ success: true, isRunning: true });
           console.log("App is running on Windows.");
         } else {
