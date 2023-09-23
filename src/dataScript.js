@@ -110,61 +110,63 @@ app_el.addEventListener("input", () => {
 });
 
 submit_el.addEventListener("click", async () => {
-  client_el = document.getElementById("editClient");
-  store_el = document.getElementById("editStore");
-  software_el = document.getElementById("editSoftware");
-  app_el = document.getElementById("editApp");
+  if (validateForm()) {
+    client_el = document.getElementById("editClient");
+    store_el = document.getElementById("editStore");
+    software_el = document.getElementById("editSoftware");
+    app_el = document.getElementById("editApp");
 
-  const client = client_el.value;
-  const store = store_el.value;
-  const software = software_el.value;
-  const app = app_el.value;
-  const jsonData = { client, store, software, app };
-  console.log(jsonData, "yoooooo");
-  const updatedData = await api.updateEditedData(jsonData);
+    const client = client_el.value;
+    const store = store_el.value;
+    const software = software_el.value;
+    const app = app_el.value;
+    const jsonData = { client, store, software, app };
+    console.log(jsonData, "yoooooo");
+    const updatedData = await api.updateEditedData(jsonData);
 
-  const response = await api.editData(jsonData);
-  alert("Data updated");
-  const editSuccess = document.getElementById("editSuccess");
+    const response = await api.editData(jsonData);
+    alert("Data updated");
+    const editSuccess = document.getElementById("editSuccess");
 
-  // client_el.value = client;
-  // store_el.value = store;
-  // software_el.value = software;
-  // app_el.value = app;
-  // console.log(client, client_el.value, "yesyes", updatedData);
-  // editSuccess.style.display = "block";
+    // client_el.value = client;
+    // store_el.value = store;
+    // software_el.value = software;
+    // app_el.value = app;
+    // console.log(client, client_el.value, "yesyes", updatedData);
+    // editSuccess.style.display = "block";
 
-  // editForm.style.display = "none";
-  // editButton.style.display = "block";
-  // cancelButton.style.display = "none";
-
-  // Check if the app is running
-  const isAppRunning = await api.checkAppRunning(jsonData.app);
-
-  if (isAppRunning) {
-    console.log("App is running now");
-    successMessage.style.display = "block";
+    // editForm.style.display = "none";
     // editButton.style.display = "block";
-    // alert(`The app '${app}' is  running.`);
+    // cancelButton.style.display = "none";
 
-    const sendPingResult = await api.sendPingRequest(jsonData);
+    // Check if the app is running
+    const isAppRunning = await api.checkAppRunning(jsonData.app);
 
-    if (sendPingResult.success) {
-      console.log("Ping request sent successfully");
+    if (isAppRunning) {
+      console.log("App is running now");
+      successMessage.style.display = "block";
+      // editButton.style.display = "block";
+      // alert(`The app '${app}' is  running.`);
+
+      const sendPingResult = await api.sendPingRequest(jsonData);
+
+      if (sendPingResult.success) {
+        console.log("Ping request sent successfully");
+      } else {
+        console.error("Failed to send ping request");
+      }
     } else {
-      console.error("Failed to send ping request");
+      console.log("App is not running");
+      alert(`The app '${app}' is not running.`);
+      successMessage.style.display = "none";
+      failedMessage.style.display = "block";
     }
-  } else {
-    console.log("App is not running");
-    alert(`The app '${app}' is not running.`);
-    successMessage.style.display = "none";
-    failedMessage.style.display = "block";
-  }
 
-  formDataModified = false;
-  updateEditButtonState();
-  // location.reload();
-  window.location.href = "success.html";
+    formDataModified = false;
+    updateEditButtonState();
+    // location.reload();
+    window.location.href = "success.html";
+  } 
   // return response;
   // console.log(response);
 });
@@ -175,6 +177,21 @@ function updateEditButtonState() {
   } else {
     submit_el.setAttribute("disabled", "true");
   }
+}
+
+function validateForm() {
+  const client = document.getElementById("editClient").value;
+  const store = document.getElementById("editStore").value;
+  const software = document.getElementById("editSoftware").value;
+  const app = document.getElementById("editApp").value;
+  console.log(client, store, "haha");
+  // Check if any of the fields are empty
+  if (!client || !store || !software || !app) {
+    alert("Please fill in all fields.");
+    return false;
+  }
+
+  return true; // Form is valid
 }
 
 updateEditButtonState();

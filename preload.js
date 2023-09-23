@@ -90,7 +90,7 @@ contextBridge.exposeInMainWorld(
     if (!shouldRunInterval) {
       console.log("Interval skipped because the flag is false.");
     } else {
-      console.log("interval started");
+      console.log("interval started", jsonData.app);
       // const jsonData = await ipcRenderer.invoke("fetch-json-data");
       if (!jsonData) {
         console.log("data not found");
@@ -101,8 +101,9 @@ contextBridge.exposeInMainWorld(
           jsonData.app
         );
         if (result) {
+            const hide = await ipcRenderer.invoke("set-hide-windows");
           const ping = await ipcRenderer.invoke("send-ping-request", jsonData);
-          console.log("App is running on interval", ping);
+          console.log("App is running on interval", ping, hide);
         } else {
           console.log("App is not running on interval");
         }

@@ -22,6 +22,20 @@ async function createWindow() {
     },
   });
 
+  ipcMain.handle("set-hide-windows", async () => {
+    //   for windows
+    // await win.setSkipTaskbar(true);
+    // for mac
+    try {
+      app.dock.hide();
+      win.hide();
+      return true;
+    } catch (error) {
+      console.error("Error hiding winows: ");
+      return false;
+    }
+  });
+
   ipcMain.handle("fetch-json-data", async () => {
     const jsonFiles = fs
       .readdirSync(dataDir)

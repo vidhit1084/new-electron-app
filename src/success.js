@@ -5,6 +5,3 @@ const checkFlag = async () => {
   console.log(flag, "this is flag");
 };
 checkFlag();
-backButton.addEventListener("click", async () => {
-  window.location.href = "welcome.html";
-});

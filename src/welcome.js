@@ -45,10 +45,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Redirect to success.html with a success message
         window.location.href = "success.html";
       } else {
+        alert(`Failed to send ping request`);
         console.error("Failed to send ping request");
         // Handle the failure case
       }
     } else {
+      alert(`App ${jsonData.app} is not running`);
       console.error("App is not running");
       // Handle the case where the app is not running
     }
