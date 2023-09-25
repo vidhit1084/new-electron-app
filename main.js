@@ -27,8 +27,8 @@ async function createWindow() {
     // await win.setSkipTaskbar(true);
     // for mac
     try {
-      app.dock.hide();
-      win.hide();
+      //   app.dock.hide();
+      //   win.hide();
       return true;
     } catch (error) {
       console.error("Error hiding winows: ");
@@ -47,7 +47,7 @@ async function createWindow() {
         fs.readFileSync(path.join(dataDir, firstJsonFile))
       );
 
-      // const url = `https://api.metadome.ai/heartbeat-dev/ping?client=${encodeURIComponent(
+      // const url = `http://localhost:3000/ping?client=${encodeURIComponent(
       //   jsonData.client
       // )}&store=${encodeURIComponent(
       //   jsonData.store
@@ -118,6 +118,7 @@ ipcMain.handle("create-file", (req, data) => {
 });
 
 ipcMain.handle("check-app-running", async (event, appName) => {
+  console.log(appName);
   if (!appName) return false;
   return new Promise((resolve, reject) => {
     if (process.platform == "darwin" || process.platform == "linux") {
@@ -126,6 +127,7 @@ ipcMain.handle("check-app-running", async (event, appName) => {
           resolve({ success: true, isRunning: true });
         } else {
           // resolve({ success: false, isRunning: false });
+          console.log("app isn't running");
           reject("App is not running");
           console.log("failed");
         }
@@ -152,7 +154,7 @@ ipcMain.handle("check-app-running", async (event, appName) => {
 ipcMain.handle("send-ping-request", async (event, jsonData) => {
   try {
     // console.log(jsonData);
-    const response = await fetch("https://api.metadome.ai/heartbeat-dev/ping", {
+    const response = await fetch("http://localhost:3000/ping", {
       method: "POST",
       body: JSON.stringify(jsonData),
       headers: {
@@ -168,16 +170,13 @@ ipcMain.handle("send-ping-request", async (event, jsonData) => {
     } else {
       setTimeout(async () => {
         try {
-          const response = await fetch(
-            "https://api.metadome.ai/heartbeat-dev/ping",
-            {
-              method: "POST",
-              body: JSON.stringify(jsonData),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const response = await fetch("http://localhost:3000/ping", {
+            method: "POST",
+            body: JSON.stringify(jsonData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
         } catch (error) {
           console.error("Failed to send ping request again", error);
         }
@@ -219,7 +218,7 @@ ipcMain.handle("edit-data", async (req, data) => {
           flag: "w",
         });
         // const editedResponse = await fetch(
-        //   `https://api.metadome.ai/heartbeat-dev/ping/${encodeURIComponent(id)}`,
+        //   `http://localhost:3000/ping/${encodeURIComponent(id)}`,
         //   {
         //     method: "PUT",
         //     headers: {
@@ -236,16 +235,13 @@ ipcMain.handle("edit-data", async (req, data) => {
         //     console.error("Error updating HeartBeat entry:", error);
         //   });
 
-        const response = await fetch(
-          "https://api.metadome.ai/heartbeat-dev/ping",
-          {
-            method: "POST",
-            body: JSON.stringify(jsonData),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch("http://localhost:3000/ping", {
+          method: "POST",
+          body: JSON.stringify(jsonData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         if (response.ok) {
           const responseData = await response.json();
@@ -255,17 +251,14 @@ ipcMain.handle("edit-data", async (req, data) => {
         } else {
           setTimeout(async () => {
             try {
-              const response = await fetch(
-                "https://api.metadome.ai/heartbeat-dev/ping",
-                {
-                  method: "POST",
+              const response = await fetch("http://localhost:3000/ping", {
+                method: "POST",
 
-                  body: JSON.stringify(jsonData),
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
+                body: JSON.stringify(jsonData),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
             } catch (error) {
               console.error("Failed to send ping request again", error);
             }

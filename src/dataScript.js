@@ -124,25 +124,13 @@ submit_el.addEventListener("click", async () => {
     console.log(jsonData, "yoooooo");
     const updatedData = await api.updateEditedData(jsonData);
 
-    const response = await api.editData(jsonData);
-    alert("Data updated");
-    const editSuccess = document.getElementById("editSuccess");
-
-    // client_el.value = client;
-    // store_el.value = store;
-    // software_el.value = software;
-    // app_el.value = app;
-    // console.log(client, client_el.value, "yesyes", updatedData);
-    // editSuccess.style.display = "block";
-
-    // editForm.style.display = "none";
-    // editButton.style.display = "block";
-    // cancelButton.style.display = "none";
-
     // Check if the app is running
     const isAppRunning = await api.checkAppRunning(jsonData.app);
 
     if (isAppRunning) {
+      const response = await api.editData(jsonData);
+      alert("Data updated");
+      const editSuccess = document.getElementById("editSuccess");
       console.log("App is running now");
       successMessage.style.display = "block";
       // editButton.style.display = "block";
@@ -152,7 +140,12 @@ submit_el.addEventListener("click", async () => {
 
       if (sendPingResult.success) {
         console.log("Ping request sent successfully");
+        formDataModified = false;
+        updateEditButtonState();
+        // location.reload();
+        window.location.href = "success.html";
       } else {
+        alert("failed to send ping request");
         console.error("Failed to send ping request");
       }
     } else {
@@ -161,12 +154,7 @@ submit_el.addEventListener("click", async () => {
       successMessage.style.display = "none";
       failedMessage.style.display = "block";
     }
-
-    formDataModified = false;
-    updateEditButtonState();
-    // location.reload();
-    window.location.href = "success.html";
-  } 
+  }
   // return response;
   // console.log(response);
 });

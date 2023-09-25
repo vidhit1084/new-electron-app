@@ -4,6 +4,7 @@ const software_el = document.getElementById("software");
 const app_el = document.getElementById("app");
 const successMessage = document.getElementById("successMessage");
 const submit_el = document.getElementById("submitData");
+const backButton = document.getElementById("backButton");
 // const check_el = document.getElementById("checkProcess");
 const sendingMessage = document.getElementById("sendingMessage");
 const clientForm = document.getElementById("clientForm");
@@ -62,50 +63,51 @@ submit_el.addEventListener("click", async (event) => {
   // const jsonData = await api.getJsonData();
   const jsonData = { client, store, software, app };
 
-  // const isAppRunning = await api.checkAppRunning(app);
+  const isAppRunning = await api.checkAppRunning(app);
 
-  // console.log(isAppRunning, "yoo");
-  // if (isAppRunning) {
-  //   alert(`The app '${app}' is running.`);
-  //   clientForm.style.display = "none";
-  //   successMessage.style.display = "block";
-  //   // const sendPingResult = await api.sendPingRequest(jsonData);
+  console.log(isAppRunning, "yoo");
+  if (isAppRunning) {
+    alert(`The app '${app}' is running.`);
+    clientForm.style.display = "none";
+    successMessage.style.display = "block";
+    const res = await api.createNote({
+      client,
+      store,
+      software,
+      app,
+    });
+    client_el.value = "";
+    store_el.value = "";
+    software_el.value = "";
+    app_el.value = "";
+    window.location.href = "success.html";
 
-  //   // if (sendPingResult.success) {
-  //   //   console.log("Ping request sent successfully");
-  //   //   sendingMessage.style.display = "block";
-  //   // } else {
-  //   //   console.error("Failed to send ping request");
-  //   // }
-  //   // setTimeout(() => {
-  //   //   successMessage.style.display = "none";
-  //   // }, 8000);
-  // } else {
-  //   console.log("The app can't be run");
-  //   alert(`The app '${app}' is not running.`);
-  //   clientForm.style.display = "none";
-  //   failedMessage.style.display = "block";
-  // }
+    // const sendPingResult = await api.sendPingRequest(jsonData);
 
-  const res = await api.createNote({
-    client,
-    store,
-    software,
-    app,
-  });
+    // if (sendPingResult.success) {
+    //   console.log("Ping request sent successfully");
+    //   sendingMessage.style.display = "block";
+    // } else {
+    //   console.error("Failed to send ping request");
+    // }
+    // setTimeout(() => {
+    //   successMessage.style.display = "none";
+    // }, 8000);
+  } else {
+    console.log("The app is not running");
+    alert(`The app '${app}' is not running.`);
+    clientForm.style.display = "none";
+    failedMessage.style.display = "block";
+    backButton.style.display = "block";
+  }
 
   // successMessage.style.display = "block";
 
   // console.log(res);
-  client_el.value = "";
-  store_el.value = "";
-  software_el.value = "";
-  app_el.value = "";
 
   // setTimeout(() => {
   //   successMessage.style.display = "none";
   // }, 8000);
-  window.location.href = "success.html";
 });
 
 // const checkAppButton = document.getElementById("checkAppButton");
@@ -120,3 +122,9 @@ submit_el.addEventListener("click", async (event) => {
 //     console.log(`${appName} is not running.`);
 //   }
 // });
+backButton.addEventListener("click", () => {
+  console.log("hellooo");
+  clientForm.style.display = "block";
+  failedMessage.style.display = "none";
+  backButton.style.display = "none";
+});
