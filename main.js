@@ -102,17 +102,17 @@ async function createWindow() {
 }
 
 ipcMain.handle("create-file", (req, data) => {
-  if (!data || !data.client || !data.store || !data.software || !data.app)
+  if (!data || !data.client || !data.store || !data.software || !data.appsArray)
     return false;
   const jsonData = {
     client: data.client,
     store: data.store,
     software: data.software,
-    app: data.app,
+    appsArray: data.appsArray,
   };
   const jsonString = JSON.stringify(jsonData, null, 2);
   const filePath = path.join(__dirname, "heartbeatData", `${data.client}.json`);
-
+  console.log(jsonData, jsonString, filePath);
   fs.writeFileSync(filePath, jsonString);
   return { success: true, filePath };
 });
@@ -128,7 +128,7 @@ ipcMain.handle("check-app-running", async (event, appName) => {
         } else {
           // resolve({ success: false, isRunning: false });
           console.log("app isn't running");
-          reject("App is not running");
+          reject(new Error("App is not running but why"));
           console.log("failed");
         }
       });
@@ -153,7 +153,7 @@ ipcMain.handle("check-app-running", async (event, appName) => {
 
 ipcMain.handle("send-ping-request", async (event, jsonData) => {
   try {
-    // console.log(jsonData);
+    console.log(jsonData, "okokokoko");
     const response = await fetch("http://localhost:3000/ping", {
       method: "POST",
       body: JSON.stringify(jsonData),
@@ -161,6 +161,7 @@ ipcMain.handle("send-ping-request", async (event, jsonData) => {
         "Content-Type": "application/json",
       },
     });
+    console.log(response);
 
     if (response.ok) {
       const responseData = await response.json();
@@ -193,7 +194,13 @@ ipcMain.handle("send-ping-request", async (event, jsonData) => {
 
 ipcMain.handle("edit-data", async (req, data) => {
   try {
-    if (!data || !data.client || !data.store || !data.software || !data.app) {
+    if (
+      !data ||
+      !data.client ||
+      !data.store ||
+      !data.software ||
+      !data.appsArray
+    ) {
       return false;
     }
     // const clientFile = data.client + ".json";
@@ -207,7 +214,7 @@ ipcMain.handle("edit-data", async (req, data) => {
         client: data.client,
         store: data.store,
         software: data.software,
-        app: data.app,
+        appsArray: data.appsArray,
       };
       const dataToWrite = JSON.stringify(jsonData, null, 2);
       const clientFile = path.join(dataDir, jsonFiles[0]);
@@ -235,36 +242,36 @@ ipcMain.handle("edit-data", async (req, data) => {
         //     console.error("Error updating HeartBeat entry:", error);
         //   });
 
-        const response = await fetch("http://localhost:3000/ping", {
-          method: "POST",
-          body: JSON.stringify(jsonData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        // const response = await fetch("http://localhost:3000/ping", {
+        //   method: "POST",
+        //   body: JSON.stringify(jsonData),
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
 
-        if (response.ok) {
-          const responseData = await response.json();
-          id = responseData.client.id;
-          console.log("Ping request sent successfully", responseData);
-          return { success: true };
-        } else {
-          setTimeout(async () => {
-            try {
-              const response = await fetch("http://localhost:3000/ping", {
-                method: "POST",
+        // if (response.ok) {
+        //   const responseData = await response.json();
+        //   id = responseData.client.id;
+        //   console.log("Ping request sent successfully", responseData);
+        //   return { success: true };
+        // } else {
+        //   setTimeout(async () => {
+        //     try {
+        //       const response = await fetch("http://localhost:3000/ping", {
+        //         method: "POST",
 
-                body: JSON.stringify(jsonData),
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-            } catch (error) {
-              console.error("Failed to send ping request again", error);
-            }
-          }, 30 * 60 * 1000);
-          console.log("Error sending ping, sending again");
-        }
+        //         body: JSON.stringify(jsonData),
+        //         headers: {
+        //           "Content-Type": "application/json",
+        //         },
+        //       });
+        //     } catch (error) {
+        //       console.error("Failed to send ping request again", error);
+        //     }
+        //   }, 30 * 60 * 1000);
+        //   console.log("Error sending ping, sending again");
+        // }
       } else {
         console.log("The file doesn't exist.");
       }

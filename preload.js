@@ -90,24 +90,69 @@ contextBridge.exposeInMainWorld(
     if (!shouldRunInterval) {
       console.log("Interval skipped because the flag is false.");
     } else {
-      console.log("interval started", jsonData.app);
+      console.log("interval started");
       // const jsonData = await ipcRenderer.invoke("fetch-json-data");
       if (!jsonData) {
         console.log("data not found");
       } else {
         console.log("Checking app status of :", jsonData);
-        const result = await ipcRenderer.invoke(
-          "check-app-running",
-          jsonData.app
-        );
-        if (result) {
-            const hide = await ipcRenderer.invoke("set-hide-windows");
-          const ping = await ipcRenderer.invoke("send-ping-request", jsonData);
-          console.log("App is running on interval", ping, hide);
-        } else {
-          console.log("App is not running on interval");
+
+        const appsArray = jsonData.appsArray || []; // Ensure appsArray is an array
+        console.log(appsArray, "appsArray");
+
+        let count = 0;
+        for (let i = 0; i < appsArray.length; i++) {
+          count++;
+          console.log(count, "running this times");
+          let eachApp = appsArray[i];
+          console.log(eachApp, "that's it");
+
+          try {
+            const result = await ipcRenderer.invoke(
+              "check-app-running",
+              eachApp
+            );
+            if (result) {
+              console.log(result, "running good");
+              const hide = await ipcRenderer.invoke("set-hide-windows");
+              const appData = {
+                client: jsonData.client,
+                store: jsonData.store,
+                software: jsonData.software,
+                app: eachApp,
+              };
+              const ping = await ipcRenderer.invoke(
+                "send-ping-request",
+                appData
+              );
+              //   console.log(ping, "hehehehe");
+
+              //   console.log(ping, "hehehehe");
+              if (ping.success) {
+                console.log("Sending ping succesfully");
+              } else {
+                console.log("unable to send ping, check connectiopn");
+              }
+            } else {
+              console.log("App is not running on interval");
+            }
+          } catch (error) {
+            console.error("Error checking app status:", error.message);
+          }
         }
+
+        // const result = await ipcRenderer.invoke(
+        //   "check-app-running",
+        //   jsonData.app
+        // );
+        // if (result) {
+        //   const hide = await ipcRenderer.invoke("set-hide-windows");
+        //   const ping = await ipcRenderer.invoke("send-ping-request", jsonData);
+        //   console.log("App is running on interval", ping, hide);
+        // } else {
+        //   console.log("App is not running on interval");
+        // }
       }
     }
-  }, 5 * 1000)
+  }, 20 * 1000)
 );

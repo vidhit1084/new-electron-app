@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   checkFlag();
   const jsonData = await api.getJsonData();
-
+  console.log(jsonData, "that's data");
   const jsonDataList = document.getElementById("jsonDataList");
 
   if (jsonData) {
@@ -35,24 +35,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   continueBtn.addEventListener("click", async () => {
     // Check if the app is running
-    const result = await api.checkAppRunning(jsonData.app);
+    // const result = await api.checkAppRunning(jsonData.app);
 
-    if (result) {
-      // Send JSON data to the ping URL
-      const pingResult = await api.sendPingRequest(jsonData);
+    // if (result) {
+    // Send JSON data to the ping URL
+    //   const pingResult = await api.sendPingRequest(jsonData);
 
-      if (pingResult.success) {
-        // Redirect to success.html with a success message
-        window.location.href = "success.html";
-      } else {
-        alert(`Failed to send ping request`);
-        console.error("Failed to send ping request");
-        // Handle the failure case
-      }
-    } else {
-      alert(`App ${jsonData.app} is not running`);
-      console.error("App is not running");
-      // Handle the case where the app is not running
-    }
+    //   if (pingResult.success) {
+    // Redirect to success.html with a success message
+    window.location.href = "success.html";
+    //   } else {
+    //     alert(`Failed to send ping request`);
+    //     console.error("Failed to send ping request");
+    //     // Handle the failure case
+    //   }
+    // } else {
+    //   alert(`App ${jsonData.app} is not running`);
+    //   console.error("App is not running");
+    //   // Handle the case where the app is not running
+    // }
   });
 });
